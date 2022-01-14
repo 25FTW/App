@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+const String mainUrl = "http://10.0.2.2:5000/form";
 
 class AddNewDefault extends StatefulWidget {
   const AddNewDefault({Key? key}) : super(key: key);
@@ -7,11 +10,22 @@ class AddNewDefault extends StatefulWidget {
   State<AddNewDefault> createState() => _AddNewDefault();
 }
 
+List<DropdownMenuItem<String>> get dropdownItems {
+  List<DropdownMenuItem<String>> menuItems = [
+    const DropdownMenuItem(child: Text("Food"), value: "Food"),
+    const DropdownMenuItem(child: Text("Clothing"), value: "Clothing"),
+    const DropdownMenuItem(child: Text("Transport"), value: "Transport"),
+    const DropdownMenuItem(child: Text("Misc"), value: "Misc"),
+  ];
+  return menuItems;
+}
+
 class _AddNewDefault extends State<AddNewDefault> {
   final _formKey = GlobalKey<FormState>();
 
   String itemName = "";
   String itemCost = "";
+  String itemCategory = "Food";
 
   @override
   Widget build(BuildContext context) {
@@ -68,11 +82,31 @@ class _AddNewDefault extends State<AddNewDefault> {
               }),
             ),
           ),
+          const Padding(
+            padding: EdgeInsets.fromLTRB(10, 15, 0, 10),
+            child: Text(
+              "Category",
+              style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
+            ),
+          ),
+          Padding(
+              padding: const EdgeInsets.fromLTRB(30, 20, 0, 10),
+              child: DropdownButton(
+                style: const TextStyle(fontSize: 20, color: Colors.black),
+                value: itemCategory,
+                items: dropdownItems,
+                onChanged: (String? value) {
+                  // print(value);
+                  setState(() {
+                    itemCategory = value!;
+                  });
+                },
+              )),
           Padding(
             padding:
                 const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
             child: ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 // Validate returns true if the form is valid, or false otherwise.
                 if (_formKey.currentState!.validate()) {
                   // If the form is valid, display a snackbar. In the real world,
@@ -83,6 +117,15 @@ class _AddNewDefault extends State<AddNewDefault> {
                   _formKey.currentState?.save();
                   // ignore: avoid_print
                   print("$itemName $itemCost");
+
+                  var url = Uri.parse(mainUrl);
+                  var response = await http
+                      .post(url, body: {'name': 'doodle', 'color': 'blue'});
+                  print('Response status: ${response.statusCode}');
+                  print('Response body: ${response.body}');
+
+                  // print(await http
+                  //     .read(Uri.parse('https://example.com/foobar.txt')));
                 }
               },
               child: const Text(

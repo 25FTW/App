@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+const String mainUrl = "http://10.0.2.2:5000/sms";
+
 class AddNewSMS extends StatefulWidget {
   const AddNewSMS({Key? key}) : super(key: key);
 
@@ -71,6 +73,7 @@ class _AddNewSMS extends State<AddNewSMS> {
                 const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
             child: ElevatedButton(
               onPressed: () {
+                FocusScope.of(context).unfocus();
                 // Validate returns true if the form is valid, or false otherwise.
                 if (_formKey.currentState!.validate()) {
                   // If the form is valid, display a snackbar. In the real world,
