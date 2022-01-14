@@ -9,6 +9,10 @@ class AddNewDefault extends StatefulWidget {
 
 class _AddNewDefault extends State<AddNewDefault> {
   final _formKey = GlobalKey<FormState>();
+
+  String itemName = "";
+  String itemCost = "";
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -34,6 +38,9 @@ class _AddNewDefault extends State<AddNewDefault> {
                 }
                 return null;
               },
+              onSaved: (value) => setState(() {
+                itemName = value!;
+              }),
             ),
           ),
           const Padding(
@@ -56,6 +63,9 @@ class _AddNewDefault extends State<AddNewDefault> {
                 }
                 return null;
               },
+              onSaved: (value) => setState(() {
+                itemCost = value!;
+              }),
             ),
           ),
           Padding(
@@ -70,9 +80,15 @@ class _AddNewDefault extends State<AddNewDefault> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Processing Data')),
                   );
+                  _formKey.currentState?.save();
+                  // ignore: avoid_print
+                  print("$itemName $itemCost");
                 }
               },
-              child: const Text('Submit'),
+              child: const Text(
+                'SUBMIT',
+                style: TextStyle(fontSize: 20),
+              ),
             ),
           ),
         ],
