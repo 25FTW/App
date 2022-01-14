@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 const String mainUrl = "http://10.0.2.2:5000/sms";
 
@@ -9,11 +10,22 @@ class AddNewSMS extends StatefulWidget {
   State<AddNewSMS> createState() => _AddNewSMS();
 }
 
+List<DropdownMenuItem<String>> get dropdownItems {
+  List<DropdownMenuItem<String>> menuItems = [
+    const DropdownMenuItem(child: Text("Food"), value: "Food"),
+    const DropdownMenuItem(child: Text("Clothing"), value: "Clothing"),
+    const DropdownMenuItem(child: Text("Transport"), value: "Transport"),
+    const DropdownMenuItem(child: Text("Misc"), value: "Misc"),
+  ];
+  return menuItems;
+}
+
 class _AddNewSMS extends State<AddNewSMS> {
   final _formKey = GlobalKey<FormState>();
 
   String itemName = "";
   String itemSMS = "";
+  String itemCategory = "Food";
 
   @override
   Widget build(BuildContext context) {
@@ -68,11 +80,31 @@ class _AddNewSMS extends State<AddNewSMS> {
               }),
             ),
           ),
+          const Padding(
+            padding: EdgeInsets.fromLTRB(10, 15, 0, 10),
+            child: Text(
+              "Category",
+              style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
+            ),
+          ),
+          Padding(
+              padding: const EdgeInsets.fromLTRB(30, 20, 0, 10),
+              child: DropdownButton(
+                style: const TextStyle(fontSize: 20, color: Colors.black),
+                value: itemCategory,
+                items: dropdownItems,
+                onChanged: (String? value) {
+                  // print(value);
+                  setState(() {
+                    itemCategory = value!;
+                  });
+                },
+              )),
           Padding(
             padding:
                 const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
             child: ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 FocusScope.of(context).unfocus();
                 // Validate returns true if the form is valid, or false otherwise.
                 if (_formKey.currentState!.validate()) {
@@ -84,6 +116,18 @@ class _AddNewSMS extends State<AddNewSMS> {
                   _formKey.currentState?.save();
                   // ignore: avoid_print
                   print("$itemName $itemSMS");
+
+                  var url = Uri.parse(mainUrl);
+                  var response = await http.post(url, body: {
+                    "username": "doodle1",
+                    "actual_item": itemName,
+                    "sms": itemSMS,
+                    "category": itemCategory
+                  });
+                  // ignore: avoid_print
+                  print('Response status: ${response.statusCode}');
+                  // ignore: avoid_print
+                  print('Response body: ${response.body}');
                 }
               },
               child: const Text(

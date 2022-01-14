@@ -119,9 +119,16 @@ class _AddNewDefault extends State<AddNewDefault> {
                   print("$itemName $itemCost");
 
                   var url = Uri.parse(mainUrl);
-                  var response = await http
-                      .post(url, body: {'name': 'doodle', 'color': 'blue'});
+                  var response = await http.post(url, body: {
+                    "username": "doodle1",
+                    "actual_item": itemName,
+                    "cost": itemCost,
+                    "date": "14",
+                    "category": itemCategory
+                  });
+                  // ignore: avoid_print
                   print('Response status: ${response.statusCode}');
+                  // ignore: avoid_print
                   print('Response body: ${response.body}');
 
                   // print(await http

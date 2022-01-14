@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       ),
       routes: {
         '/': (context) =>
-            const MyHomePage(title: '25FTW - Cashflow Management'),
+            const MyHomePage(title: '25FTW - CashFlow Management'),
         '/transaction': (context) => const TransactionPage(),
       },
     );
@@ -39,7 +39,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
   int index_ = 1;
 
   // final navigationKey = GlobalKey<CurvedNavigationBar>;
@@ -49,12 +48,6 @@ class _MyHomePageState extends State<MyHomePage> {
     const AddTransactionPage(),
     const DashboardPage()
   ];
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {

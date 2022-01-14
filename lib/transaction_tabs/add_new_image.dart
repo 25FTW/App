@@ -1,6 +1,11 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:dio/dio.dart';
+
+const mainURL = "http://10.0.2.2:5000/image";
 
 class AddNewImage extends StatefulWidget {
   const AddNewImage({Key? key}) : super(key: key);
@@ -41,7 +46,7 @@ class _AddNewImage extends State<AddNewImage> {
             _image != null
                 ? Image.file(
                     _image!,
-                    height: 450,
+                    height: 200,
                   )
                 : const FlutterLogo(
                     size: 100,
@@ -68,7 +73,17 @@ class _AddNewImage extends State<AddNewImage> {
                 size: 30,
               ),
               label: const Text("Upload"),
-              onPressed: () {},
+              onPressed: () async {
+                var formData = FormData();
+                var dio = Dio();
+                formData.files.add(MapEntry(
+                  "imagefile",
+                  await MultipartFile.fromFile(_image!.path,
+                      filename: "pic-name.png"),
+                ));
+                formData.fields.add(const MapEntry("username", "doodle"));
+                var response = await dio.post(mainURL, data: formData);
+              },
             ),
           ],
         ),
