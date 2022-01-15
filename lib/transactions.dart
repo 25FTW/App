@@ -15,7 +15,7 @@ String mainUrl = "http://10.0.2.2:5000/getAllAnalysis";
 class Data {
   Map fetchedData = {
     "data": [
-      {"name": "Joining Reward", "value": "100"},
+      {"name": "Joining Reward", "value": "10"},
     ]
   };
   late List _data;
