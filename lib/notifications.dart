@@ -81,16 +81,19 @@ class _NotificationsPage extends State<NotificationsPage> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15.0),
           ),
-          color: Colors.pink,
+          color: Colors.greenAccent,
           elevation: 10,
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
               ListTile(
-                leading:
-                    const Icon(Icons.account_balance_wallet_rounded, size: 50),
-                title: Text("Name: ${_data.getNotification(index)}",
-                    style: const TextStyle(color: Colors.white, fontSize: 25)),
+                leading: const Icon(
+                  Icons.notifications_active_rounded,
+                  size: 50,
+                  color: Colors.black,
+                ),
+                title: Text(_data.getNotification(index),
+                    style: const TextStyle(color: Colors.black, fontSize: 25)),
               )
             ],
           ),

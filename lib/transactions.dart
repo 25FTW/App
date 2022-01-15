@@ -45,6 +45,7 @@ class Data {
 
 class _TransactionPage extends State<TransactionPage> {
   final Data _data = Data();
+  num _funds = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -65,10 +66,14 @@ class _TransactionPage extends State<TransactionPage> {
             print('Response body: ${response.body}');
 
             Map<String, dynamic> parsedBody = json.decode(response.body);
+            num _totalFunds = 0;
+
             parsedBody.forEach((key, value) {
               // print("Key, Val: $key $value");
+              _totalFunds += value;
               _data.addElement(key, value.toString());
             });
+            _funds = _totalFunds;
 
             setState(() {});
 
@@ -83,53 +88,45 @@ class _TransactionPage extends State<TransactionPage> {
     );
   }
 
-//   Widget _itemBuilder(BuildContext context, int index) {
-//     return InkWell(
-//       child: Card(
-//         margin: const EdgeInsets.fromLTRB(15, 10, 15, 10),
-//         color: Colors.yellow.shade700,
-//         child: Center(
-//           child: Column(
-//             children: [
-//               Text(
-//                 "Category Name: ${_data.getName(index)}",
-//                 style: const TextStyle(fontSize: 25, color: Colors.white),
-//               ),
-//               Text(
-//                 "Category Value: ${_data.getValue(index)}",
-//                 style: const TextStyle(fontSize: 25, color: Colors.white),
-//               ),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
   Widget _itemBuilder(BuildContext context, int index) {
     return InkWell(
       child: SizedBox(
         width: 500,
-        child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15.0),
-          ),
-          color: Colors.pink,
-          elevation: 10,
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              ListTile(
-                leading:
-                    const Icon(Icons.account_balance_wallet_rounded, size: 50),
-                title: Text("Name: ${_data.getName(index)}",
-                    style: const TextStyle(color: Colors.white, fontSize: 25)),
-                subtitle: Text("Value: ${_data.getValue(index)}",
-                    style: const TextStyle(color: Colors.white, fontSize: 18)),
-              )
-            ],
-          ),
+        child: Column(
+          children: [
+            (index == 0)
+                ? Padding(
+                    padding: const EdgeInsets.fromLTRB(15, 15, 0, 10),
+                    child: Text(
+                      "Total Spent: $_funds \nTotal Funds: 1000.0",
+                      style: const TextStyle(
+                          fontSize: 25, fontWeight: FontWeight.w600),
+                    ),
+                  )
+                : const Text(""),
+            Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              color: Colors.pink,
+              elevation: 10,
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  ListTile(
+                    leading: const Icon(Icons.account_balance_wallet_rounded,
+                        size: 50),
+                    title: Text("Name: ${_data.getName(index)}",
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 25)),
+                    subtitle: Text("Value: ${_data.getValue(index)}",
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 18)),
+                  )
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
