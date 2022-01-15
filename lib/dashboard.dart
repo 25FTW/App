@@ -190,6 +190,7 @@ class _DashboardPage extends State<DashboardPage> {
                               .withOpacity(1.0),
                           radius: MediaQuery.of(context).size.width / 4.44),
                     );
+                    setState(() {});
                   });
 
                   setState(() {

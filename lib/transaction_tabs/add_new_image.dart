@@ -87,10 +87,13 @@ class _AddNewImage extends State<AddNewImage> {
                     await MultipartFile.fromFile(_image!.path,
                         filename: "pic-name.png"),
                   ));
-                  formData.fields.add(const MapEntry("username", "doodle"));
+                  formData.fields.add(const MapEntry("username", "doodle1"));
                   var response = await dio.post(mainURL, data: formData);
                 },
               ),
+              const SizedBox(
+                height: 20,
+              )
             ],
           ),
         ),

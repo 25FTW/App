@@ -98,7 +98,7 @@ class _TransactionPage extends State<TransactionPage> {
                 ? Padding(
                     padding: const EdgeInsets.fromLTRB(15, 15, 0, 10),
                     child: Text(
-                      "Total Spent: $_funds \nTotal Funds: 1000.0",
+                      "Total Spent: $_funds \nTotal Funds: 10000.0",
                       style: const TextStyle(
                           fontSize: 25, fontWeight: FontWeight.w600),
                     ),
