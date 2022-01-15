@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'notifications.dart';
+import 'dart:convert';
 
 class TransactionPage extends StatefulWidget {
   const TransactionPage({Key? key}) : super(key: key);
@@ -7,12 +10,12 @@ class TransactionPage extends StatefulWidget {
   State<TransactionPage> createState() => _TransactionPage();
 }
 
+String mainUrl = "http://10.0.2.2:5000/getAllAnalysis";
+
 class Data {
   Map fetchedData = {
     "data": [
-      {"id": 111, "name": "abc"},
-      {"id": 222, "name": "pqr"},
-      {"id": 333, "name": "abc"}
+      {"name": "Joining Reward", "value": "100"},
     ]
   };
   late List _data;
@@ -23,12 +26,16 @@ class Data {
     _data = fetchedData["data"];
   }
 
-  int getId(int index) {
-    return _data[index]["id"];
-  }
-
   String getName(int index) {
     return _data[index]["name"];
+  }
+
+  String getValue(int index) {
+    return _data[index]["value"];
+  }
+
+  void addElement(String data, String value) {
+    _data.add({"name": data, "value": value});
   }
 
   int getLength() {
@@ -48,26 +55,79 @@ class _TransactionPage extends State<TransactionPage> {
           itemCount: _data.getLength(),
           itemBuilder: _itemBuilder,
         ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () async {
+            var url = Uri.parse(mainUrl);
+            var response = await http.post(url, body: {"username": "doodle1"});
+            // ignore: avoid_print
+            print('Response status: ${response.statusCode}');
+            // ignore: avoid_print
+            print('Response body: ${response.body}');
+
+            Map<String, dynamic> parsedBody = json.decode(response.body);
+            parsedBody.forEach((key, value) {
+              // print("Key, Val: $key $value");
+              _data.addElement(key, value.toString());
+            });
+
+            setState(() {});
+
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const NotificationsPage()));
+          },
+          child: const Icon(Icons.add_alert_rounded),
+        ),
       ),
     );
   }
 
+//   Widget _itemBuilder(BuildContext context, int index) {
+//     return InkWell(
+//       child: Card(
+//         margin: const EdgeInsets.fromLTRB(15, 10, 15, 10),
+//         color: Colors.yellow.shade700,
+//         child: Center(
+//           child: Column(
+//             children: [
+//               Text(
+//                 "Category Name: ${_data.getName(index)}",
+//                 style: const TextStyle(fontSize: 25, color: Colors.white),
+//               ),
+//               Text(
+//                 "Category Value: ${_data.getValue(index)}",
+//                 style: const TextStyle(fontSize: 25, color: Colors.white),
+//               ),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
+
   Widget _itemBuilder(BuildContext context, int index) {
     return InkWell(
-      child: Card(
-        margin: const EdgeInsets.fromLTRB(15, 10, 15, 10),
-        color: Colors.yellow.shade700,
-        child: Center(
+      child: SizedBox(
+        width: 500,
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          color: Colors.pink,
+          elevation: 10,
           child: Column(
-            children: [
-              Text(
-                _data.getName(index),
-                style: const TextStyle(fontSize: 25, color: Colors.white),
-              ),
-              Text(
-                _data.getLength().toString(),
-                style: const TextStyle(fontSize: 25, color: Colors.white),
-              ),
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              ListTile(
+                leading:
+                    const Icon(Icons.account_balance_wallet_rounded, size: 50),
+                title: Text("Name: ${_data.getName(index)}",
+                    style: const TextStyle(color: Colors.white, fontSize: 25)),
+                subtitle: Text("Value: ${_data.getValue(index)}",
+                    style: const TextStyle(color: Colors.white, fontSize: 18)),
+              )
             ],
           ),
         ),
